@@ -1,28 +1,8 @@
-## Usage
+## Weird game!!!
+A game I made for my mom because she needed a game to host for people.
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
+I used this project to learn the basics of connecting devices with databases. I also used this project to learn the basic of SolidJS. 
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+I used supabase to connect devices, and SolidJS for the frontend.
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm run dev`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-## Deployment
-
-Learn more about deploying your application with the [documentations](https://vite.dev/guide/static-deploy.html)
+I removed my supabase url and anon key from the project, so you would have to use your own. In the src directory, add a file called `AppConfig.ts`. Add your url and anon key there, and import it wherever you need. You could also use a `.env` file, but I didn't know how to do that, so I just created a typescript config file.
