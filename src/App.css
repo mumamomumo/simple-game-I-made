@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply box-border p-0 m-0;
+  }
+  body {
+    @apply bg-background-800 text-text-200 flex;
+  }
+  button {
+    @apply bg-secondary-600 hover:bg-secondary-700 text-white px-4 py-2 rounded-md duration-150 max-w-[90svw];
+  }
+  button.warning {
+    @apply bg-secondary-300 hover:bg-red-600 text-accent-900;
+  }
+  .app-user-select > div > button {
+    @apply w-[50svw] max-w-[350px] min-w-[300px];
+  }
+
+  input {
+    @apply border-2 border-secondary-950 rounded-md px-2 py-1 duration-200 transition-colors focus:border-secondary-700 focus:outline-none h-full;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
