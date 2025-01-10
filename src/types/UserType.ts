@@ -1,3 +1,7 @@
+export type HistoryType = {
+  prompt: string;
+  words: string[];
+};
 export type UserType =
   | {
       user_type: "host";
@@ -8,7 +12,7 @@ export type UserType =
         prompt?: string;
         duration?: number;
       };
-      history?: { prompt?: string; words: string[] }[];
+      history: HistoryType[];
     }
   | {
       user_type: "player";

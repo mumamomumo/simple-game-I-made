@@ -15,7 +15,8 @@ function UserSelect(props: { setPlayerState: Function; playerState: number }) {
 
   const handleSubmitId = async () => {
     setGameIdError(false);
-    const gameId = gameIdInput!.value;
+    var gameId: string = gameIdInput!.value.trim();
+    gameId = gameId.toUpperCase();
     if (gameId === "") return;
     if (await validGameId(gameId)) {
       setGameId(gameId);
@@ -37,6 +38,7 @@ function UserSelect(props: { setPlayerState: Function; playerState: number }) {
     } else {
       console.log("register");
       registerPlayer(gameId(), username);
+      props.setPlayerState(0);
     }
   };
 

@@ -15,6 +15,9 @@
   button.warning {
     @apply bg-secondary-300 hover:bg-red-600 text-accent-900;
   }
+  button:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
   .app-user-select > div > button {
     @apply w-[50svw] max-w-[350px] min-w-[300px];
   }
@@ -22,8 +25,32 @@
   input {
     @apply border-2 border-secondary-950 rounded-md px-2 py-1 duration-200 transition-colors focus:border-secondary-700 focus:outline-none h-full;
   }
-}
 
+  .animate-rotate-cw {
+    animation: rotate-cw 2s linear infinite;
+  }
+
+  .animate-rotate-ccw {
+    animation: rotate-ccw 1s linear infinite;
+  }
+
+  @keyframes rotate-ccw {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(-360deg);
+    }
+  }
+  @keyframes rotate-cw {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
