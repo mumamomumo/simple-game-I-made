@@ -6,6 +6,7 @@ import {
 } from "../../data/GameData";
 import { setUserStore, userStore } from "../../store/AppStore";
 import { createEffect, createSignal, For } from "solid-js";
+import Progressbar from "./Progressbar";
 
 // Subscribe to the game_data column in the game_sessions table
 // Show the game data
@@ -17,30 +18,45 @@ function PlayerView() {
   const [gameStarting, setGameStarting] = createSignal(false);
   const [gameStartingTime, setGameStartingTime] = createSignal(3);
   const [gameDuration, setGameDuration] = createSignal(0);
-
+  const [durationLeft, setDurationLeft] = createSignal(0);
   const [enteredWords, setEnteredWords] = createSignal<string[]>([]);
 
   let enteredWordsInput;
-  let interval: NodeJS.Timeout;
+  let intervalCd: NodeJS.Timeout;
+  let intervalDur: NodeJS.Timeout;
   // 3 2 1 Go
   createEffect(() => {
     if (gameStarting()) {
       console.log("starting");
       setGameStartingTime(3);
-      interval = setInterval(() => {
+      setDurationLeft(gameDuration());
+      intervalCd = setInterval(() => {
         setGameStartingTime((gameStartingTime) => gameStartingTime - 1);
       }, 1000);
     } else {
       console.log("stopped");
-      clearInterval(interval);
+      clearInterval(intervalCd);
       setGameStarting(false);
     }
   });
   createEffect(() => {
-    if (gameStartingTime() <= 0) {
+    if (gameStartingTime() <= 0 && gameStarting()) {
+      console.log(gameStartingTime());
       console.log("starting game");
-      clearInterval(interval);
+      clearInterval(intervalCd);
       setGameStarting(false);
+      setGameStarted(true);
+      intervalDur = setInterval(() => {
+        setDurationLeft((durationLeft) => durationLeft - 1);
+      }, 1000);
+    }
+  });
+  createEffect(() => {
+    if (durationLeft() <= 0) {
+      clearInterval(intervalDur);
+      setGameStarted(false);
+      setDurationLeft(0);
+      setGamePrompt("");
     }
   });
 
@@ -58,6 +74,7 @@ function PlayerView() {
     setGameStarting(payload.new.started);
     setGameStarted(payload.new.started);
     setGameDuration(payload.new.game_data.duration);
+    clearInterval(intervalDur);
     if (payload.new.started) {
       setGamePrompt(payload.new.game_data.prompt);
       resetGame();
@@ -102,7 +119,7 @@ function PlayerView() {
                 " " +
                 (gameStarted()
                   ? ""
-                  : "underline decoration-accent-100 decoration-[5px] underline-offset-4")
+                  : "underline decoration-accent-100 decoration-[5px] underline-offset-8")
               }
             >
               {gamePrompt() ? gamePrompt() : "Prompt will show up here"}
@@ -131,6 +148,11 @@ function PlayerView() {
                 )}
               </For>
             </div>
+            <progress
+              value={durationLeft()}
+              class="w-full accent-slate-500"
+              max={gameDuration()}
+            />
           </div>
         </div>
       </div>
