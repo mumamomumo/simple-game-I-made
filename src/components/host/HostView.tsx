@@ -187,7 +187,7 @@ function HostView() {
             </div>
           </div>
         </div>
-        <div class="h-full px-5">
+        <div class="h-full px-5" hidden={!showPlayers() && !showHistory()}>
           {showPlayers() && (
             <div class="w-full h-full flex flex-col justify-center items-center flex-1">
               <div class="w-[90svw] h-[80svh] max-w-[500px] flex flex-col justify-between  bg-secondary-900 rounded-xl p-5 gap-3">
