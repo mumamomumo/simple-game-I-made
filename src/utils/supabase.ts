@@ -1,7 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import config from "../AppConfig";
-
 export const supabase = createClient(
-  config.supabaseConfig.supabaseUrl,
-  config.supabaseConfig.supabaseAnonKey
+  process.env.SUPABASE_URL!,
+  process.env.ANON_KEY!
 );

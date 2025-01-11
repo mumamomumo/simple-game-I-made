@@ -25,3 +25,4 @@ dist-ssr
 
 # Sensitive stuff
 src/AppConfig.ts
+.env
