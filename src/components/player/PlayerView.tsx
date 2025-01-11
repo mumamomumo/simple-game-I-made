@@ -14,8 +14,8 @@ function PlayerView() {
 
   const [gamePrompt, setGamePrompt] = createSignal("");
   const [gameStarted, setGameStarted] = createSignal(false);
-  const [gameStarting, setGameStarting] = createSignal(false);
-  const [gameStartingTime, setGameStartingTime] = createSignal(3);
+  const [gameCountdown, setGameCountdown] = createSignal(false);
+  const [gameStartingTimer, setGameStartingTimer] = createSignal(3);
   const [gameDuration, setGameDuration] = createSignal(0);
   const [durationLeft, setDurationLeft] = createSignal(0);
   const [enteredWords, setEnteredWords] = createSignal<string[]>([]);
@@ -25,37 +25,33 @@ function PlayerView() {
   let intervalDur: NodeJS.Timeout;
   // 3 2 1 Go
   createEffect(() => {
-    if (gameStarting()) {
-      console.log("starting");
-      setGameStartingTime(3);
-      setDurationLeft(gameDuration());
+    if (gameCountdown()) {
+      setGameStartingTimer(3);
       intervalCd = setInterval(() => {
-        setGameStartingTime((gameStartingTime) => gameStartingTime - 1);
+        setGameStartingTimer((gameStartingTimer) => gameStartingTimer - 1);
       }, 1000);
     } else {
-      console.log("stopped");
       clearInterval(intervalCd);
-      setGameStarting(false);
     }
   });
   createEffect(() => {
-    if (gameStartingTime() <= 0 && gameStarting()) {
-      console.log(gameStartingTime());
-      console.log("starting game");
-      clearInterval(intervalCd);
-      setGameStarting(false);
+    if (gameStartingTimer() === 0) {
+      console.log("starting");
       setGameStarted(true);
+      setGameCountdown(false);
+      setDurationLeft(gameDuration() - 1);
       intervalDur = setInterval(() => {
+        console.log("decrementing");
         setDurationLeft((durationLeft) => durationLeft - 1);
       }, 1000);
     }
   });
+  // Duration of the game
   createEffect(() => {
     if (durationLeft() <= 0) {
+      console.log("Game end");
       clearInterval(intervalDur);
       setGameStarted(false);
-      setDurationLeft(0);
-      setGamePrompt("");
     }
   });
 
@@ -70,13 +66,15 @@ function PlayerView() {
   const onGameUpdate = (
     payload: RealtimePostgresUpdatePayload<{ [key: string]: any }>
   ) => {
-    setGameStarting(payload.new.started);
-    setGameStarted(payload.new.started);
+    setGameStartingTimer(3);
+    setGameCountdown(payload.new.started);
     setGameDuration(payload.new.game_data.duration);
     clearInterval(intervalDur);
     if (payload.new.started) {
       setGamePrompt(payload.new.game_data.prompt);
       resetGame();
+    } else {
+      setGameStarted(false);
     }
   };
   listenToGame(userStore.game_id, onGameUpdate);
@@ -91,13 +89,9 @@ function PlayerView() {
   };
   return (
     <>
-      {gameStarting() && (
-        <div class="starting-overlay fixed w-screen h-screen bg-[rgba(0,0,0,0.7)] text-white">
-          <div class="flex flex-col justify-center items-center h-[100svh]">
-            <h1 class="text-2xl">
-              Game starting in {gameStartingTime()} seconds
-            </h1>
-          </div>
+      {gameCountdown() && (
+        <div class="w-full h-full flex justify-center items-center flex-1 bg-black/50 fixed text-white">
+          <h1 class="text-2xl">{gameStartingTimer()}</h1>
         </div>
       )}
       <div class="app-player-view w-full h-full flex flex-col justify-center items-center flex-1">
