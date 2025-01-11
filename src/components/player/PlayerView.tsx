@@ -6,7 +6,6 @@ import {
 } from "../../data/GameData";
 import { setUserStore, userStore } from "../../store/AppStore";
 import { createEffect, createSignal, For } from "solid-js";
-import Progressbar from "./Progressbar";
 
 // Subscribe to the game_data column in the game_sessions table
 // Show the game data
