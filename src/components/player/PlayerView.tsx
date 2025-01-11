@@ -100,7 +100,9 @@ function PlayerView() {
               class={
                 "text-center text-[1.3rem]" +
                 " " +
-                (gameStarted() ? "" : "underline decoration-accent-600")
+                (gameStarted()
+                  ? ""
+                  : "underline decoration-accent-100 decoration-[5px] underline-offset-4")
               }
             >
               {gamePrompt() ? gamePrompt() : "Prompt will show up here"}

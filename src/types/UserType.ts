@@ -1,6 +1,7 @@
 export type HistoryType = {
   prompt: string;
   words: string[];
+  id: any;
 };
 export type UserType =
   | {

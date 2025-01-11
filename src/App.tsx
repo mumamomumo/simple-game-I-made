@@ -13,8 +13,6 @@ import UserSelect from "./components/ui/UserSelect";
 import { createEffect, createSignal } from "solid-js";
 
 /*
-TODO:
- - Create a guest page where users will have to enter a code.
 
  Allow the host to create a new prompt, which saves the current prompt and words to history.
 */

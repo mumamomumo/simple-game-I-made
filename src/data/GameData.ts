@@ -1,6 +1,6 @@
 import { supabase } from "../utils/supabase";
 import { userStore, setUserStore } from "../store/AppStore";
-import { UserType } from "../types/UserType";
+import { HistoryType, UserType } from "../types/UserType";
 import { v4 as uuidv4 } from "uuid";
 
 const GAME_SESSION_TABLE = "game_sessions";
@@ -21,6 +21,7 @@ function makeid(length: number) {
 export async function loadFromSession() {
   const saved_host_id = sessionStorage.getItem("host_id");
   const saved_game_id = sessionStorage.getItem("game_id");
+  const history = sessionStorage.getItem("history");
   const username = sessionStorage.getItem("username");
   if (saved_host_id && saved_game_id) {
     const { data, error } = await supabase
@@ -35,7 +36,8 @@ export async function loadFromSession() {
         host_id: saved_host_id,
         started: data[0].started,
         game_id: saved_game_id,
-        game_data: data[0].game_data,
+        game_data: { prompt: "", duration: data[0].game_data.duration },
+        history: JSON.parse(history || "[]"),
       });
     }
   } else if (username && saved_game_id) {
@@ -59,7 +61,7 @@ export function saveToSession() {
   if (userStore.user_type === "host") {
     sessionStorage.setItem("host_id", userStore.host_id);
     sessionStorage.setItem("game_id", userStore.game_id);
-    sessionStorage.setItem("game_data", JSON.stringify(userStore.game_data));
+    sessionStorage.setItem("history", JSON.stringify(userStore.history));
   } else if (userStore.user_type === "player") {
     sessionStorage.setItem("username", userStore.username);
     sessionStorage.setItem("game_id", userStore.game_id);
@@ -81,7 +83,7 @@ export async function registerHost() {
       prompt: "",
       duration: 10,
     },
-    history: new Array(),
+    history: Array<HistoryType>(0),
   });
 
   if (userStore.user_type === "host") {
