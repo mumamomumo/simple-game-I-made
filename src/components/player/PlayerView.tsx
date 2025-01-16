@@ -102,7 +102,9 @@ function PlayerView() {
                 Quit
               </button>
               <h1 class="text-center text-xl">Welcome, {userStore.username}</h1>
-              <div class="w-12" />
+              <div class="time-left rounded-full border-2  border-accent-800 w-5 h-5  p-3 flex justify-center items-center">
+                {durationLeft()}
+              </div>
             </div>
           </div>
           <div class="app-player-main flex flex-col items-center px-10 py-0 h-full">
@@ -141,11 +143,6 @@ function PlayerView() {
                 )}
               </For>
             </div>
-            <progress
-              value={durationLeft()}
-              class="w-full accent-slate-500"
-              max={gameDuration()}
-            />
           </div>
         </div>
       </div>
