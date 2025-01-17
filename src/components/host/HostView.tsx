@@ -19,7 +19,7 @@ function HostView() {
   const [showHistory, setShowHistory] = createSignal(false);
   const [enteredWords, setEnteredWords] = createSignal<string[]>([]);
   const [durationLeft, setDurationLeft] = createSignal(0);
-
+  const [showWords, setShowWords] = createSignal(false);
   // Update the database, sessionStorage, and the App State when the user is done editing
   const onInputBlur = () => {
     if (userStore.user_type !== "host" || promptInput!.value === "") return;
@@ -112,6 +112,7 @@ function HostView() {
               </h1>
               <div />
             </div>
+            {/* Host inputs */}
             <div class="flex gap-2">
               <div class="w-1/2 flex flex-col">
                 <label for="prompt">Prompt:</label>
@@ -138,6 +139,7 @@ function HostView() {
                 />
               </div>
             </div>
+            {/* Host buttons */}
             <div class="flex gap-2">
               <button class="flex-1" onClick={onToggleStart}>
                 {userStore.started ? "Stop" : "Start"}
@@ -156,14 +158,24 @@ function HostView() {
               setDurationLeft={setDurationLeft}
               onDurationEnd={resetGame}
             />
-            <div class="flex flex-col h-full w-full items-center bg-background-950 mt-2 p-2 rounded-md overflow-y-scroll">
-              <For each={enteredWords()}>
-                {(word) => (
-                  <div class="w-full my-2 p-2 text-center bg-white rounded-md">
-                    {word}
-                  </div>
-                )}
-              </For>
+            <div
+              class="flex flex-col h-full w-full items-center bg-background-950 mt-2 p-2 rounded-md overflow-y-scroll"
+              onclick={() => setShowWords(!showWords())}
+            >
+              {showWords() || !userStore.started ? (
+                <For each={enteredWords()}>
+                  {(word) => (
+                    <div class="w-full my-2 p-2 text-center bg-white rounded-md">
+                      {word}
+                    </div>
+                  )}
+                </For>
+              ) : (
+                <h1 class="underline text-xl">
+                  {enteredWords().length} word
+                  {enteredWords().length === 1 ? "" : "s"} entered
+                </h1>
+              )}
             </div>
             <div class="flex justify-between">
               <p

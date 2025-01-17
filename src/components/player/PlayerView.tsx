@@ -75,6 +75,7 @@ function PlayerView() {
       resetGame();
     } else {
       setGameStarted(false);
+      setDurationLeft(0);
     }
   };
   listenToGame(userStore.game_id, onGameUpdate);
